@@ -4,10 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
 
 import {
-  filtersFetching,
-  filtersFetched,
-  filtersFetchingError,
+  // filtersFetching,
+  // filtersFetched,
+  // filtersFetchingError,
   activeFilterChanged,
+  fetchFilters,
 } from "../../actions";
 import Spinner from "../spinner/Spinner";
 
@@ -23,15 +24,22 @@ const HeroesFilters = () => {
   const dispatch = useDispatch();
   const { request } = useHttp();
 
-  // Запрос на сервер для получения фильтров и последовательной смены состояния
-  useEffect(() => {
-    dispatch(filtersFetching());
-    request("http://localhost:3001/filters")
-      .then((data) => dispatch(filtersFetched(data)))
-      .catch(() => dispatch(filtersFetchingError()));
-
+  // используя ReduxThunk в dispatch можно передавать фун-ю
+  useEffect(
+    () => {
+      dispatch(fetchFilters(request));
+    },
     // eslint-disable-next-line
-  }, []);
+    []
+  );
+
+  // Запрос на сервер для получения фильтров и последовательной смены состояния
+  // useEffect(() => {
+  //   dispatch(filtersFetching());
+  //   request("http://localhost:3001/filters")
+  //     .then((data) => dispatch(filtersFetched(data)))
+  //     .catch(() => dispatch(filtersFetchingError()));
+  // }, []);
 
   if (filtersLoadingStatus === "loading") {
     return <Spinner />;

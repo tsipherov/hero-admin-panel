@@ -5,10 +5,11 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { createSelector } from "reselect";
 
 import {
-  heroesFetching,
-  heroesFetched,
-  heroesFetchingError,
+  // heroesFetching,
+  // heroesFetched,
+  // heroesFetchingError,
   heroDeleted,
+  fetchHeroes,
 } from "../../actions";
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from "../spinner/Spinner";
@@ -45,15 +46,24 @@ const HeroesList = () => {
   const dispatch = useDispatch();
   const { request } = useHttp();
 
-  useEffect(() => {
-    dispatch("HEROES_FETCHING");
-    // dispatch(heroesFetching());
-    request("http://localhost:3001/heroes")
-      .then((data) => dispatch(heroesFetched(data)))
-      .catch(() => dispatch(heroesFetchingError()));
-
+  // используя ReduxThunk в dispatch можно передавать фун-ю
+  useEffect(
+    () => {
+      dispatch(fetchHeroes(request));
+    },
     // eslint-disable-next-line
-  }, []);
+    []
+  );
+
+  // useEffect(() => {
+  //   dispatch("HEROES_FETCHING");
+  //   // dispatch(heroesFetching());
+  //   request("http://localhost:3001/heroes")
+  //     .then((data) => dispatch(heroesFetched(data)))
+  //     .catch(() => dispatch(heroesFetchingError()));
+
+  //   // eslint-disable-next-line
+  // }, []);
 
   // Функция берет id и по нему удаляет ненужного персонажа из store
   // ТОЛЬКО если запрос на удаление прошел успешно
